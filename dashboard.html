@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard - MSB Finance</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>User Dashboard</h1>
+    <button id="logoutBtn">Logout</button>
+  </header>
+
+  <main>
+    <section>
+      <h2>Apply for Loan</h2>
+      <input type="number" id="loanAmount" placeholder="Loan Amount (R300 - R4000)">
+      <button id="applyLoanBtn">Apply</button>
+    </section>
+
+    <section>
+      <h2>Upload Document</h2>
+      <input type="file" id="docFile">
+      <button id="uploadDocBtn">Upload</button>
+    </section>
+
+    <section>
+      <h2>Your Loans</h2>
+      <table border="1" id="loansTable">
+        <thead>
+          <tr><th>Amount</th><th>Status</th><th>Applied On</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Your Documents</h2>
+      <table border="1" id="docsTable">
+        <thead>
+          <tr><th>File</th><th>Status</th><th>Uploaded On</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
