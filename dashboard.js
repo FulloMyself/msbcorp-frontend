@@ -88,31 +88,65 @@ async function loadLoans() {
 }
 
 // Load Documents
+// Load Documents
 async function loadDocs() {
-    try {
-        const res = await fetch(`${API}/user/documents`, {
-            headers: { 'Authorization': `Bearer ${token}` }
+  try {
+    const res = await fetch(`${API}/user/documents`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const docs = await res.json();
+    const tbody = document.querySelector('#docsTable tbody');
+    tbody.innerHTML = '';
+
+    docs.forEach(d => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${d.fileName}</td>
+        <td>${d.status || 'Pending'}</td>
+        <td>${new Date(d.createdAt).toLocaleString()}</td>
+        <td>
+          <button class="openDocBtn" data-id="${d._id}">Open</button>
+          <button class="deleteDocBtn" data-id="${d._id}">Delete</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // Attach Open handlers
+    document.querySelectorAll('.openDocBtn').forEach(btn => {
+      btn.onclick = async () => {
+        const id = btn.dataset.id;
+        const res = await fetch(`${API}/user/documents/${id}/download`, {
+          headers: { 'Authorization': `Bearer ${token}` }
         });
+        const data = await res.json();
+        if (res.ok) window.open(data.url, '_blank');
+        else alert(data.message);
+      };
+    });
 
-        const docs = await res.json();
-        const tbody = document.querySelector('#docsTable tbody');
-        tbody.innerHTML = '';
-
-        docs.forEach(d => {
-            const tr = document.createElement('tr');
-            // Use the signed URL returned by the backend
-            tr.innerHTML = `
-  <td><a href="${d.signedUrl}" target="_blank">${d.fileName}</a></td>
-  <td>${d.status || 'Pending'}</td>
-  <td>${new Date(d.createdAt).toLocaleString()}</td>
-`;
-
-            tbody.appendChild(tr);
+    // Attach Delete handlers
+    document.querySelectorAll('.deleteDocBtn').forEach(btn => {
+      btn.onclick = async () => {
+        if (!confirm('Are you sure you want to delete this document?')) return;
+        const id = btn.dataset.id;
+        const res = await fetch(`${API}/user/documents/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
         });
-    } catch (err) {
-        console.error(err);
-        alert('Failed to load documents');
-    }
+        const data = await res.json();
+        if (res.ok) {
+          alert('Document deleted');
+          loadDocs();
+        } else alert(data.message);
+      };
+    });
+
+  } catch (err) {
+    console.error(err);
+    alert('Failed to load documents');
+  }
 }
 
 // Initial load
