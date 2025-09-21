@@ -1,15 +1,14 @@
 const token = localStorage.getItem('token');
-if(!token) window.location.href = 'index.html';
+if (!token) window.location.href = 'index.html';
 
 const LOCAL = window.location.hostname === 'localhost';
 const API = LOCAL ? 'http://localhost:5000/api' : 'https://msbcorp-backend.onrender.com/api';
 
-document.getElementById('logoutBtn').onclick = ()=>{
+document.getElementById('logoutBtn').onclick = () => {
   localStorage.clear();
   window.location.href = 'index.html';
 };
 
-// Apply Loan
 // Apply Loan
 document.getElementById('applyLoanBtn').onclick = async () => {
   const amount = parseFloat(document.getElementById('loanAmount').value);
@@ -26,9 +25,9 @@ document.getElementById('applyLoanBtn').onclick = async () => {
     });
 
     const data = await res.json();
-    if (res.ok) { 
-      alert('Loan applied successfully'); 
-      loadLoans(); 
+    if (res.ok) {
+      alert('Loan applied successfully');
+      loadLoans();
     } else alert(data.message || 'Failed to apply loan');
   } catch (err) {
     console.error(err);
@@ -53,8 +52,8 @@ document.getElementById('uploadDocBtn').onclick = async () => {
 
     const data = await res.json();
     if (res.ok) {
-      alert('Document uploaded successfully'); 
-      loadDocs(); 
+      alert('Document uploaded successfully');
+      loadDocs();
     } else alert(data.message || 'Upload failed');
   } catch (err) {
     console.error(err);
@@ -101,8 +100,9 @@ async function loadDocs() {
 
     docs.forEach(d => {
       const tr = document.createElement('tr');
+      // Use the signed URL returned by the backend
       tr.innerHTML = `
-        <td><a href="${API.replace('/api','')}/uploads/${d.fileName}" target="_blank">${d.fileName}</a></td>
+        <td><a href="${d.url}" target="_blank">${d.fileName}</a></td>
         <td>${d.status || 'Pending'}</td>
         <td>${new Date(d.createdAt).toLocaleString()}</td>
       `;
