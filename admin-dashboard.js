@@ -64,13 +64,43 @@ async function loadDocs(){
                       <button onclick="updateDoc('${d._id}','Rejected')">Reject</button>
                     </td><td>
           <a href="${d.url}" target="_blank">Open</a>
+          <button class="delete-btn" data-id="${d._id}">Delete</button>
         </td>`;
       tbody.appendChild(tr);
     });
-  } catch(err){
-    alert('Failed to load documents');
+
+    // attach delete handlers
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const id = e.target.dataset.id;
+        if (!confirm("Are you sure you want to delete this document?")) return;
+
+        try {
+          const res = await fetch(`${API_URL}/admin/documents/${id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+          });
+
+          if (res.ok) {
+            alert("Document deleted.");
+            loadDocuments();
+          } else {
+            const err = await res.json();
+            alert(err.error || "Failed to delete document");
+          }
+        } catch (err) {
+          console.error("Delete error", err);
+        }
+      });
+    });
+  } catch (err) {
+    console.error("Error loading documents", err);
   }
 }
+
+loadDocuments();
 
 // Update Loan
 async function updateLoan(id,status){
