@@ -6,6 +6,40 @@
   <title>MSB Finance</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/ico" href="favicon.ico">
+  <style>
+    /* Footer styling */
+    footer {
+      background-color: #4B0082; /* deep purple */
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    footer img {
+      height: 50px;
+      margin: 5px;
+    }
+    footer .logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    footer p {
+      margin: 5px 0;
+      font-size: 0.9rem;
+    }
+    @media(max-width: 600px) {
+      footer .logos {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -82,7 +116,17 @@
     </div>
   </div>
 
+  <!-- Footer -->
   <footer>
+    <div class="logos">
+      <div class="ncr">
+        <img src="images/ncr-logo.png" alt="National Credit Regulator">
+        <p>NCR Number: 12345</p>
+      </div>
+      <div class="msb-logo">
+        <img src="images/msb-logo.png" alt="MSB Finance">
+      </div>
+    </div>
     <p>© 2025 MSB Finance. All rights reserved.</p>
   </footer>
 
