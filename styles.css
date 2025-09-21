@@ -14,44 +14,6 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Navbar */
-.navbar {
-  position: sticky;
-  top: 0;
-  background: #3b1a6b; /* purple */
-  color: #fff;
-  z-index: 1000;
-  padding: 0.5rem 0;
-}
-
-.navbar .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.nav-links li a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 0.4rem 0.8rem;
-  transition: 0.3s;
-}
-
-.nav-links li a:hover {
-  color: #ffd700; /* gold */
-}
-
 /* Buttons */
 .btn {
   background-color: #ffd700; /* gold */
@@ -173,3 +135,30 @@ footer {
     justify-content: center;
   }
 }
+
+/* Mobile adjustments */
+@media(max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  #loginBtn {
+    width: 80%;
+    max-width: 200px;
+    margin: 0 auto;
+    padding: 10px 0;
+    border-radius: 8px;
+    background-color: gold;
+    color: #4B0082;
+    font-weight: bold;
+  }
+}
+
