@@ -138,7 +138,7 @@
         <li><a href="#hero">Home</a></li>
         <li><a href="#info">How It Works</a></li>
         <li><a href="#about">About</a></li>
-        <li><button id="loginBtn" class="btn">Login</button></li>
+        <li><button id="loginBtn" class="btn">Sign In</button></li>
       </ul>
     </div>
   </nav>
@@ -191,17 +191,19 @@
 
   <!-- Registration Modal -->
   <div id="registerModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Register</h2>
-      <input type="text" id="registerName" placeholder="Full Name" required />
-      <input type="email" id="registerEmail" placeholder="Email" required />
-      <input type="text" id="registerContact" placeholder="Contact Number" required />
-      <input type="password" id="registerPassword" placeholder="Password" required />
-      <input type="password" id="registerConfirmPassword" placeholder="Confirm Password" required />
-      <button id="registerSubmit" class="btn">Register</button>
-    </div>
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Register</h2>
+    <input type="text" id="registerName" placeholder="Full Name" required />
+    <input type="email" id="registerEmail" placeholder="Email" required />
+    <input type="text" id="registerContact" placeholder="Contact Number" required />
+    <input type="password" id="registerPassword" placeholder="Password" required />
+    <input type="password" id="registerConfirmPassword" placeholder="Confirm Password" required />
+    <button id="registerSubmit" class="btn">Register</button>
+    <p>Already have an account? <span id="showLogin" class="link">Login here</span></p>
   </div>
+</div>
+
 
   <!-- Footer -->
   <footer>
@@ -227,5 +229,50 @@
       });
     });
   </script>
+  <script>
+  const applyNowBtn = document.getElementById("applyNowBtn");
+  const registerModal = document.getElementById("registerModal");
+
+  applyNowBtn.addEventListener("click", () => {
+    registerModal.style.display = "block";
+  });
+
+  // Optional: close button functionality
+  registerModal.querySelector(".close").addEventListener("click", () => {
+    registerModal.style.display = "none";
+  });
+
+  // Close modal when clicking outside of it
+  window.addEventListener("click", (e) => {
+    if (e.target === registerModal) {
+      registerModal.style.display = "none";
+    }
+  });
+</script>
+
+<script>
+  const loginModal = document.getElementById("loginModal");
+  const showLoginLink = document.getElementById("showLogin");
+
+  showLoginLink.addEventListener("click", () => {
+    registerModal.style.display = "none";
+    loginModal.style.display = "block";
+  });
+
+  // Close buttons for both modals (if not already added)
+  document.querySelectorAll(".modal .close").forEach(closeBtn => {
+    closeBtn.addEventListener("click", () => {
+      closeBtn.parentElement.parentElement.style.display = "none";
+    });
+  });
+
+  // Click outside modal to close
+  window.addEventListener("click", (e) => {
+    if (e.target === registerModal) registerModal.style.display = "none";
+    if (e.target === loginModal) loginModal.style.display = "none";
+  });
+</script>
+
+
 </body>
 </html>
