@@ -6,6 +6,11 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+
 body {
   background-color: #fff;
   color: #3b1a6b; /* deep purple */

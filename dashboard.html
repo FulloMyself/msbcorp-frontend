@@ -31,25 +31,24 @@
 </div>
 
 <div class="quick-links">
-  <a href="loan-application.html" class="quick-link">Apply for a Loan</a>
-  <a href="upload-document.html" class="quick-link">Upload Document</a>
-  <a href="documents.html" class="quick-link">View Documents</a>
+  <a href="#loansSection" class="quick-link">My Loans</a>
+  <a href="#documentsSection" class="quick-link">My Documents</a>
+  <a href="#applyLoanSection" class="quick-link">Apply for Loan</a>
 </div>
 
-
-    <section>
+<section id="applyLoanSection">
       <h2>Apply for Loan</h2>
       <input type="number" id="loanAmount" placeholder="Loan Amount (R300 - R4000)">
       <button id="applyLoanBtn">Apply</button>
     </section>
 
-    <section>
+    <section id="documentsSection">
       <h2>Upload Document</h2>
       <input type="file" id="docFile">
       <button id="uploadDocBtn">Upload</button>
     </section>
 
-    <section>
+    <section id="loansSection">
       <h2>Your Loans</h2>
       <table border="1" id="loansTable">
         <thead>
