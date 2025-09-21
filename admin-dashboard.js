@@ -2,7 +2,7 @@ const token = localStorage.getItem('token');
 if(!token) window.location.href = 'index.html';
 
 const LOCAL = window.location.hostname === 'localhost';
-const API = LOCAL ? 'http://localhost:5000/api' : 'https://msb-backend-5km0.onrender.com/api';
+const API = LOCAL ? 'http://localhost:5000/api' : 'https://msbcorp-backend.onrender.com/api';
 
 document.getElementById('logoutBtn').onclick = ()=>{
   localStorage.clear();
