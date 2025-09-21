@@ -8,29 +8,68 @@
   <link rel="icon" type="image/ico" href="favicon.ico">
 </head>
 <body>
-  <header>
-    <h1>MSB Finance</h1>
-    <button id="loginBtn">Login</button>
-  </header>
+
+  <!-- Sticky Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <h1>MSB Finance</h1>
+      <ul class="nav-links">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#info">How It Works</a></li>
+        <li><a href="#about">About</a></li>
+        <li><button id="loginBtn" class="btn">Login</button></li>
+      </ul>
+    </div>
+  </nav>
 
   <main>
-    <p>We provide loans from R300 - R4000.</p>
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+      <h2>Loans Made Simple</h2>
+      <p>We provide quick loans from <strong>R300 - R4000</strong> with easy application and instant approval.</p>
+      <button id="applyNowBtn" class="btn">Apply Now</button>
+    </section>
+
+    <!-- How It Works -->
+    <section id="info" class="info">
+      <h3>How It Works</h3>
+      <div class="steps">
+        <div class="step">
+          <h4>1. Register</h4>
+          <p>Create your free account in seconds.</p>
+        </div>
+        <div class="step">
+          <h4>2. Apply</h4>
+          <p>Fill in your loan details and submit your application.</p>
+        </div>
+        <div class="step">
+          <h4>3. Get Approved</h4>
+          <p>Our team reviews your application and sends funds fast.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <h3>About MSB Finance</h3>
+      <p>MSB Finance is a trusted South African financial services platform that helps you access small loans quickly and securely. Our mission is to make borrowing easy, transparent, and convenient for everyone.</p>
+    </section>
   </main>
 
   <!-- Login Modal -->
-  <div id="loginModal" class="modal" style="display:none;">
+  <div id="loginModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Login</h2>
       <input type="email" id="loginEmail" placeholder="Email">
       <input type="password" id="loginPassword" placeholder="Password">
-      <button id="loginSubmit">Login</button>
-      <p>Don't have an account? <span id="showRegister" style="cursor:pointer;color:blue;">Register now</span></p>
+      <button id="loginSubmit" class="btn">Login</button>
+      <p>Don't have an account? <span id="showRegister" class="link">Register now</span></p>
     </div>
   </div>
 
   <!-- Registration Modal -->
-  <div id="registerModal" class="modal" style="display:none;">
+  <div id="registerModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Register</h2>
@@ -39,10 +78,23 @@
       <input type="text" id="registerContact" placeholder="Contact Number" required />
       <input type="password" id="registerPassword" placeholder="Password" required />
       <input type="password" id="registerConfirmPassword" placeholder="Confirm Password" required />
-      <button id="registerSubmit">Register</button>
+      <button id="registerSubmit" class="btn">Register</button>
     </div>
   </div>
 
+  <footer>
+    <p>© 2025 MSB Finance. All rights reserved.</p>
+  </footer>
+
   <script src="main.js"></script>
+  <script>
+    // Smooth scroll for nav links
+    document.querySelectorAll('.nav-links a').forEach(anchor => {
+      anchor.addEventListener('click', function(e){
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
 </body>
 </html>

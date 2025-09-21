@@ -59,8 +59,8 @@ async function loadDocs() {
             tr.innerHTML = `<td>${d.user.name}</td>
                     <td>${d.fileName}</td>
                     <td>${d.status}</td>
-                    <td><button onclick="updateDoc('${d._id}','Approved')">Approve</button>
-                      <button onclick="updateDoc('${d._id}','Rejected')">Reject</button></td>
+                    <td><button class="approve-btn" onclick="updateDoc('${d._id}','Approved')">Approve</button>
+                      <button class="reject-btn" onclick="updateDoc('${d._id}','Rejected')">Reject</button></td>
                       <td><button class="openDocBtn" data-id="${d._id}">Open</button>
                         <button class="delete-btn" data-id="${d._id}">Delete</button></td>`;
             tbody.appendChild(tr);
@@ -153,7 +153,35 @@ async function updateDoc(id, status) {
     }
 }
 
+async function loadAdminStats() {
+  try {
+    const resUsers = await fetch(`${API}/admin/users`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const users = await resUsers.json();
+
+    const resLoans = await fetch(`${API}/admin/loans`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const loans = await resLoans.json();
+
+    const totalUsers = users.length;
+    const totalLoans = loans.length;
+    const totalLoanAmount = loans.reduce((sum, loan) => sum + loan.amount, 0);
+
+    document.getElementById('totalUsers').textContent = totalUsers;
+    document.getElementById('adminTotalLoans').textContent = totalLoans;
+    document.getElementById('adminTotalLoanAmount').textContent = `R${totalLoanAmount}`;
+  } catch (err) {
+    console.error("Error loading admin stats:", err);
+  }
+}
+
+
+
+
 // Initial load
 loadUsers();
 loadLoans();
 loadDocs();
+loadAdminStats();

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - MSB Finance</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
   <link rel="icon" type="image/ico" href="favicon.ico">
 </head>
 <body>
@@ -14,6 +14,22 @@
   </header>
 
   <main>
+
+    <div class="stats-container">
+  <div class="stat-card">
+    <h3>Total Users</h3>
+    <p id="totalUsers">0</p>
+  </div>
+  <div class="stat-card">
+    <h3>Total Loans</h3>
+    <p id="adminTotalLoans">0</p>
+  </div>
+  <div class="stat-card">
+    <h3>Total Loan Value</h3>
+    <p id="adminTotalLoanAmount">R0</p>
+  </div>
+</div>
+
     <section>
       <h2>All Users</h2>
       <table border="1" id="usersTable">

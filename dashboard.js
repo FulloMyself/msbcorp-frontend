@@ -148,6 +148,33 @@ async function loadDocs() {
   }
 }
 
+async function loadStats() {
+  try {
+    const resLoans = await fetch(`${API}/user/loans`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const loans = await resLoans.json();
+
+    const totalLoans = loans.length;
+    const totalLoanAmount = loans.reduce((sum, loan) => sum + loan.amount, 0);
+
+    const resDocs = await fetch(`${API}/user/documents`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const docs = await resDocs.json();
+    const totalDocs = docs.length;
+
+    document.getElementById('totalLoans').textContent = totalLoans;
+    document.getElementById('totalLoanAmount').textContent = `R${totalLoanAmount}`;
+    document.getElementById('totalDocs').textContent = totalDocs;
+  } catch (err) {
+    console.error("Error loading stats:", err);
+  }
+}
+
+
+
 // Initial load
 loadLoans();
 loadDocs();
+loadStats();
