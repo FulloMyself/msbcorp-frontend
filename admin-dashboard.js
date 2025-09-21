@@ -85,7 +85,7 @@ async function loadDocs(){
 
           if (res.ok) {
             alert("Document deleted.");
-            loadDocuments();
+            loadDocs();
           } else {
             const err = await res.json();
             alert(err.error || "Failed to delete document");
@@ -100,7 +100,7 @@ async function loadDocs(){
   }
 }
 
-loadDocuments();
+loadDocs();
 
 // Update Loan
 async function updateLoan(id,status){
