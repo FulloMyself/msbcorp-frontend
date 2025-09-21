@@ -16,25 +16,36 @@ closeButtons.forEach(btn => btn.onclick = ()=> { btn.parentElement.parentElement
 const API = 'https://msb-backend-5km0.onrender.com/api';
 
 // Register
-document.getElementById('registerSubmit').onclick = async ()=>{
+document.getElementById('registerSubmit').onclick = async () => {
   const name = document.getElementById('registerName').value;
   const email = document.getElementById('registerEmail').value;
+  const contact = document.getElementById('registerContact').value;
   const password = document.getElementById('registerPassword').value;
+  const confirmPassword = document.getElementById('registerConfirmPassword').value;
 
-  const res = await fetch(`${API}/auth/register`,{
-    method:'POST',
-    headers:{ 'Content-Type':'application/json' },
-    body: JSON.stringify({ name,email,password })
+  if (password !== confirmPassword) {
+    return alert('Passwords do not match!');
+  }
+
+  const res = await fetch(`${API}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, contact, password })
   });
+
   const data = await res.json();
-  if(data.token){
+
+  if (data.token) {
     alert('Registration successful');
-    registerModal.style.display='none';
+    registerModal.style.display = 'none';
     localStorage.setItem('token', data.token);
     localStorage.setItem('role', data.user.role);
-    window.location.href = data.user.role==='admin' ? 'admin-dashboard.html' : 'dashboard.html';
-  } else alert(data.message);
+    window.location.href = data.user.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html';
+  } else {
+    alert(data.message);
+  }
 };
+
 
 // Login
 document.getElementById('loginSubmit').onclick = async ()=>{
