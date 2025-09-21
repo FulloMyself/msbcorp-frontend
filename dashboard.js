@@ -88,7 +88,6 @@ async function loadLoans() {
 }
 
 // Load Documents
-// Load Documents
 async function loadDocs() {
   try {
     const res = await fetch(`${API}/user/documents`, {
