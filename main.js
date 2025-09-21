@@ -19,7 +19,7 @@ closeButtons.forEach(btn => {
 });
 
 // Backend API URL
-const API = 'https://msb-backend-5km0.onrender.com/api';
+const API = 'https://msbcorp-backend.onrender.com/api';
 
 // ---------------- REGISTER ----------------
 document.getElementById('registerSubmit').onclick = async () => {
