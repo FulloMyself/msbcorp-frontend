@@ -67,24 +67,26 @@ async function loadDocs() {
         });
 
         // attach open handlers
-    // Attach Open handlers for Admin
 document.querySelectorAll('.openDocBtn').forEach(btn => {
   btn.onclick = async () => {
     const id = btn.dataset.id;
+
     try {
-      const res = await fetch(`${API}/admin/documents/${id}/download`, {
+      const res = await fetch(`${API}/admin/documents/${id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+
       const data = await res.json();
 
       if (res.ok) {
-        window.open(data.url, '_blank'); // ✅ opens signed S3 link
+        // ✅ Open document in new tab
+        window.open(data.url, '_blank');
       } else {
-        alert(data.error || data.message || "Failed to open document");
+        alert(data.error || data.message || 'Unable to open document');
       }
     } catch (err) {
-      console.error("Open doc error", err);
-      alert("Error opening document");
+      console.error('Open document error:', err);
+      alert('Error opening document');
     }
   };
 });
