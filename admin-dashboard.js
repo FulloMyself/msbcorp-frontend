@@ -62,7 +62,9 @@ async function loadDocs(){
                     <td>
                       <button onclick="updateDoc('${d._id}','Approved')">Approve</button>
                       <button onclick="updateDoc('${d._id}','Rejected')">Reject</button>
-                    </td>`;
+                    </td><td>
+          <a href="${d.url}" target="_blank">Open</a>
+        </td>`;
       tbody.appendChild(tr);
     });
   } catch(err){
