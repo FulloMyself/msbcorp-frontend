@@ -73,7 +73,7 @@ async function loadDocs() {
                 if (!confirm("Are you sure you want to delete this document?")) return;
 
                 try {
-                    const res = await fetch(`${API_URL}/admin/documents/${id}`, {
+                    const res = await fetch(`${API}/admin/documents/${id}`, {
                         method: "DELETE",
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
