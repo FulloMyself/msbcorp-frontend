@@ -18,27 +18,30 @@
   </main>
 
   <!-- Login Modal -->
-  <div id="loginModal" class="modal">
+  <div id="loginModal" class="modal" style="display:none;">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Login</h2>
       <input type="email" id="loginEmail" placeholder="Email">
       <input type="password" id="loginPassword" placeholder="Password">
       <button id="loginSubmit">Login</button>
-      <p>Don't have an account? <span id="showRegister">Register now</span></p>
+      <p>Don't have an account? <span id="showRegister" style="cursor:pointer;color:blue;">Register now</span></p>
     </div>
   </div>
 
   <!-- Registration Modal -->
-<div id="registerModal">
-  <input type="text" id="registerName" placeholder="Full Name" required />
-  <input type="email" id="registerEmail" placeholder="Email" required />
-  <input type="text" id="registerContact" placeholder="Contact Number" required />
-  <input type="password" id="registerPassword" placeholder="Password" required />
-  <input type="password" id="registerConfirmPassword" placeholder="Confirm Password" required />
-  <button id="registerSubmit">Register</button>
-</div>
-
+  <div id="registerModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Register</h2>
+      <input type="text" id="registerName" placeholder="Full Name" required />
+      <input type="email" id="registerEmail" placeholder="Email" required />
+      <input type="text" id="registerContact" placeholder="Contact Number" required />
+      <input type="password" id="registerPassword" placeholder="Password" required />
+      <input type="password" id="registerConfirmPassword" placeholder="Confirm Password" required />
+      <button id="registerSubmit">Register</button>
+    </div>
+  </div>
 
   <script src="main.js"></script>
 </body>
