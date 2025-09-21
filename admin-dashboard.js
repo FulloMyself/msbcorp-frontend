@@ -57,7 +57,7 @@ async function loadDocs() {
         docs.forEach(d => {
             const tr = document.createElement('tr');
             tr.innerHTML = `<td>${d.user.name}</td>
-                    <td><a href="${API.replace('/api', '')}/uploads/${d.fileName}" target="_blank">${d.fileName}</a></td>
+                    <td>${d.fileName}"</td>
                     <td>${d.status}</td>
                     <td><button onclick="updateDoc('${d._id}','Approved')">Approve</button>
                       <button onclick="updateDoc('${d._id}','Rejected')">Reject</button></td>
