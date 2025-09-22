@@ -11,41 +11,11 @@ const termsModal = document.getElementById('termsModal');
 const faqBtn = document.getElementById('faqBtn');
 const faqModal = document.getElementById('faqModal');
 const loanSlider = document.getElementById('loanSlider');
-const sliderAmount = document.getElementById('sliderAmount');
-const displayAmount = document.getElementById('displayAmount');
-const displayInterest = document.getElementById('displayInterest');
-const displayTotal = document.getElementById('displayTotal');
-const calcApplyBtn = document.getElementById('calcApplyBtn');
-
-function formatCurrency(amount) {
-  return new Intl.NumberFormat('en-ZA', {
-    style: 'currency',
-    currency: 'ZAR',
-    minimumFractionDigits: 0
-  }).format(amount);
-}
-
-function updateCalculation() {
-  const principal = parseInt(loanSlider.value);
-  const interestRate = 0.30; // 30%
-  const interest = Math.round(principal * interestRate);
-  const total = principal + interest;
-
-  sliderAmount.textContent = formatCurrency(principal);
-  displayAmount.textContent = formatCurrency(principal);
-  displayInterest.textContent = formatCurrency(interest);
-  displayTotal.textContent = formatCurrency(total);
-}
-
-loanSlider.addEventListener('input', updateCalculation);
-
-// Redirects to register modal when applying
-calcApplyBtn.addEventListener('click', () => {
-  document.getElementById('registerModal').style.display = 'flex';
-});
-
-// Initialize on load
-updateCalculation();
+  const sliderAmount = document.getElementById('sliderAmount');
+  const displayAmount = document.getElementById('displayAmount');
+  const displayInterest = document.getElementById('displayInterest');
+  const displayTotal = document.getElementById('displayTotal');
+  const calcApplyBtn = document.getElementById('calcApplyBtn');
 
 // ---------------- MODAL TOGGLE ----------------
 
@@ -86,6 +56,36 @@ window.addEventListener('click', e => {
   if (e.target === faqModal) faqModal.style.display = 'none';
 });
 
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-ZA', { 
+      style: 'currency', 
+      currency: 'ZAR',
+      minimumFractionDigits: 0 
+    }).format(amount);
+  }
+
+  function updateCalculation() {
+    const principal = parseInt(loanSlider.value);
+    const interestRate = 0.30; // 30%
+    const interest = Math.round(principal * interestRate);
+    const total = principal + interest;
+
+    sliderAmount.textContent = formatCurrency(principal);
+    displayAmount.textContent = formatCurrency(principal);
+    displayInterest.textContent = formatCurrency(interest);
+    displayTotal.textContent = formatCurrency(total);
+  }
+
+  loanSlider.addEventListener('input', updateCalculation);
+
+  // Redirects to register modal when applying
+  calcApplyBtn.addEventListener('click', () => {
+    document.getElementById('registerModal').style.display = 'flex';
+  });
+
+  // Initialize on load
+  updateCalculation();
+
 // ---------------- TERMS & FAQ MODALS ----------------
 termsBtn.addEventListener('click', () => {
   termsModal.style.display = 'flex';
@@ -125,7 +125,7 @@ document.querySelectorAll('.faq-question').forEach(question => {
 
 // ---------------- SMOOTH SCROLL ----------------
 document.querySelectorAll('.nav-links a').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
+  anchor.addEventListener('click', function(e){
     e.preventDefault();
     const target = document.querySelector(this.getAttribute('href'));
     if (target) {
