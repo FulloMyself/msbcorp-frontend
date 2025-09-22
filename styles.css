@@ -24,10 +24,71 @@ body {
   cursor: pointer;
   border-radius: 5px;
   transition: 0.3s;
+  color: #4B0082;
 }
 
 .btn:hover {
   background-color: #e6c200;
+}
+
+/* Reusable gold button style */
+.btn-gold {
+  background-color: #ffd700; /* gold */
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+  color: #4B0082;
+}
+
+.btn-gold:hover {
+  background-color: #e6c200;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #4B0082; /* deep purple */
+  color: white;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Logo on the left */
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: auto;
+}
+
+/* Centered nav links */
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  justify-content: center;
+  flex: 1; /* takes up middle space */
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Login button on the right */
+#loginBtn {
+  margin-left: auto;
 }
 
 /* Hero Section */
@@ -78,7 +139,7 @@ body {
   margin-bottom: 0.5rem;
 }
 
-/* About */
+/* About Section */
 .about p {
   max-width: 700px;
   margin: 0 auto;
@@ -89,6 +150,29 @@ footer {
   padding: 1rem;
   background: #3b1a6b;
   color: #fff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+footer img {
+  height: 50px;
+  margin: 5px;
+}
+
+footer .logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+footer p {
+  margin: 5px 0;
+  font-size: 0.9rem;
 }
 
 /* Modal */
@@ -137,17 +221,17 @@ footer {
 }
 
 /* Mobile adjustments */
-@media(max-width: 600px) {
-  .navbar {
+@media (max-width: 600px) {
+  .navbar .container {
     flex-direction: column;
     gap: 10px;
-    text-align: center;
   }
-  
+
   .nav-links {
     flex-direction: column;
     gap: 10px;
     width: 100%;
+    justify-content: center;
   }
 
   #loginBtn {
@@ -156,9 +240,10 @@ footer {
     margin: 0 auto;
     padding: 10px 0;
     border-radius: 8px;
-    background-color: gold;
-    color: #4B0082;
-    font-weight: bold;
+  }
+
+  footer .logos {
+    flex-direction: column;
+    gap: 15px;
   }
 }
-
