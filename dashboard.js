@@ -27,13 +27,16 @@ document.getElementById('applyLoanBtn').onclick = async () => {
         const data = await res.json();
         if (res.ok) {
             alert('Loan applied successfully');
-            loadLoans();
+            // Refresh both the loans table and stats
+            await loadLoans();
+            await loadStats(); // <-- Add this line to update stats dynamically
         } else alert(data.message || 'Failed to apply loan');
     } catch (err) {
         console.error(err);
         alert('Error applying loan');
     }
 };
+
 
 // Upload Document
 document.getElementById('uploadDocBtn').onclick = async () => {
@@ -54,6 +57,7 @@ document.getElementById('uploadDocBtn').onclick = async () => {
         if (res.ok) {
             alert('Document uploaded successfully');
             loadDocs();
+            await loadStats();
         } else alert(data.message || 'Upload failed');
     } catch (err) {
         console.error(err);
@@ -138,6 +142,7 @@ async function loadDocs() {
         if (res.ok) {
           alert('Document deleted');
           loadDocs();
+          await loadStats();
         } else alert(data.message);
       };
     });
