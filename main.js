@@ -1,4 +1,4 @@
-// Get modal elements
+// ---------------- MODAL ELEMENTS ----------------
 const loginBtn = document.getElementById('loginBtn');
 const loginModal = document.getElementById('loginModal');
 const registerModal = document.getElementById('registerModal');
@@ -8,6 +8,8 @@ const applyNowBtn = document.getElementById('applyNowBtn');
 const closeButtons = document.querySelectorAll('.close');
 const termsBtn = document.getElementById('termsBtn');
 const termsModal = document.getElementById('termsModal');
+const faqBtn = document.getElementById('faqBtn');
+const faqModal = document.getElementById('faqModal');
 
 // ---------------- MODAL TOGGLE ----------------
 
@@ -40,29 +42,50 @@ closeButtons.forEach(btn => {
   });
 });
 
-// Close modal when clicking outside
+// Close modals when clicking outside
 window.addEventListener('click', e => {
   if (e.target === loginModal) loginModal.style.display = 'none';
   if (e.target === registerModal) registerModal.style.display = 'none';
+  if (e.target === termsModal) termsModal.style.display = 'none';
+  if (e.target === faqModal) faqModal.style.display = 'none';
 });
 
-// Open modal
-termsBtn.onclick = () => {
+// ---------------- TERMS & FAQ MODALS ----------------
+termsBtn.addEventListener('click', () => {
   termsModal.style.display = 'flex';
-};
+});
 
-// Close modal (reusing existing close button code)
-termsModal.querySelector('.close').onclick = () => {
+termsModal.querySelector('.close').addEventListener('click', () => {
   termsModal.style.display = 'none';
-};
+});
 
-// Close modal when clicking outside content
-window.onclick = (e) => {
-  if (e.target === termsModal) {
-    termsModal.style.display = 'none';
-  }
-};
+faqBtn.addEventListener('click', () => {
+  faqModal.style.display = 'flex';
+});
 
+faqModal.querySelector('.close').addEventListener('click', () => {
+  faqModal.style.display = 'none';
+});
+
+// ---------------- FAQ ACCORDION ----------------
+document.querySelectorAll('.faq-question').forEach(question => {
+  question.addEventListener('click', () => {
+    const answer = question.nextElementSibling;
+    const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+
+    // Close all other answers
+    document.querySelectorAll('.faq-answer').forEach(ans => {
+      ans.style.maxHeight = null;
+    });
+
+    // Toggle current answer
+    if (!isOpen) {
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    } else {
+      answer.style.maxHeight = null;
+    }
+  });
+});
 
 // ---------------- SMOOTH SCROLL ----------------
 document.querySelectorAll('.nav-links a').forEach(anchor => {

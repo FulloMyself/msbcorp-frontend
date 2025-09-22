@@ -29,9 +29,9 @@ body {
 
 .btn:hover {
   background-color: #e6c200;
+  transform: translateY(-2px);
 }
 
-/* Reusable gold button style */
 .btn-gold {
   background-color: #ffd700; /* gold */
   border: none;
@@ -39,12 +39,13 @@ body {
   font-weight: bold;
   cursor: pointer;
   border-radius: 5px;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.3s;
   color: #4B0082;
 }
 
 .btn-gold:hover {
   background-color: #e6c200;
+  transform: translateY(-2px);
 }
 
 /* Navbar */
@@ -64,20 +65,18 @@ body {
   width: 100%;
 }
 
-/* Logo on the left */
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
   margin-right: auto;
 }
 
-/* Centered nav links */
 .nav-links {
   display: flex;
   list-style: none;
   gap: 20px;
   justify-content: center;
-  flex: 1; /* takes up middle space */
+  flex: 1;
 }
 
 .nav-links li a {
@@ -86,7 +85,6 @@ body {
   font-weight: bold;
 }
 
-/* Login button on the right */
 #loginBtn {
   margin-left: auto;
 }
@@ -139,7 +137,6 @@ body {
   margin-bottom: 0.5rem;
 }
 
-/* About Section */
 .about p {
   max-width: 700px;
   margin: 0 auto;
@@ -160,6 +157,7 @@ footer {
 footer img {
   height: 50px;
   margin: 5px;
+  object-fit: contain;
 }
 
 footer .logos {
@@ -170,12 +168,15 @@ footer .logos {
   flex-wrap: wrap;
 }
 
+footer .logos img {
+  height: 50px; /* uniform height for NCR and MSB logos */
+}
+
 footer p {
   margin: 5px 0;
   font-size: 0.9rem;
 }
 
-/* Footer Socials */
 /* Footer Socials */
 .footer-socials {
   display: flex;
@@ -186,23 +187,23 @@ footer p {
 }
 
 .footer-socials a {
-  color: #ffffff; /* white by default for clarity */
+  color: #FFD700; /* bright gold */
   text-decoration: none;
   transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .footer-socials a:hover {
-  color: #FFD700; /* gold on hover */
+  color: #fff;
   transform: scale(1.2);
 }
 
 .footer-icon svg {
   width: 28px;
   height: 28px;
+  fill: currentColor;
 }
 
 /* Modal */
-/* Modal (already exists) */
 .modal {
   display: none;
   position: fixed;
@@ -213,82 +214,117 @@ footer p {
   background: rgba(0,0,0,0.5);
   justify-content: center;
   align-items: center;
-  z-index: 1001; /* higher than navbar */
+  z-index: 1001;
 }
 
-.modal-content {
+.modal-content, .terms-content, .faq-content {
   background: #fff;
   color: #3b1a6b;
   padding: 2rem;
-  border-radius: 10px;
-  width: 90%;
+  border-radius: 12px;
+  width: 95%;
   max-width: 600px;
   position: relative;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  border-top: 5px solid #ffd700;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
-.modal-content .close {
+.modal-content .close, .terms-content .close, .faq-content .close {
   position: absolute;
   top: 10px;
   right: 15px;
   font-size: 1.5rem;
   cursor: pointer;
+  color: #4B0082;
 }
 
-.modal-text {
-  max-height: 60vh;
-  overflow-y: auto;
-}
-
-
-.link {
-  color: #3b1a6b;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-/* Terms & Conditions Modal */
-.terms-content {
-  max-height: 80vh; /* modal max height */
-  overflow-y: auto; /* scrollable content */
-  padding: 2rem;
-  border-radius: 10px;
-  background-color: #fff;
-  color: #3b1a6b;
-  width: 90%;
-  max-width: 600px;
-}
-
-/* Smooth scroll inside modal */
-.terms-text {
+/* Scrollable content inside modals */
+.terms-text, .faq-text {
   scroll-behavior: smooth;
   line-height: 1.6;
 }
 
-.terms-text h4 {
+.terms-text h4, .faq-text h4 {
   margin-top: 1rem;
   color: #4B0082;
+  font-weight: bold;
 }
 
-.terms-text p {
+.terms-text p, .faq-text p, .faq-text ul {
   margin-bottom: 1rem;
   font-size: 0.95rem;
 }
 
-/* Close button */
-.terms-content .close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 1.5rem;
+/* FAQ Accordion */
+.faq-question {
+  background-color: #f5f0ff;
+  border: 1px solid #4B0082;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
   cursor: pointer;
-  color: #4B0082;
+  text-align: left;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
 
-/* Button hover */
-#termsBtn:hover {
+.faq-question:hover {
+  background-color: #e0d4ff;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  text-align: left;
+  padding-left: 1rem;
+  font-weight: normal;
+}
+
+.faq-answer p, .faq-answer ul {
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+}
+
+.faq-answer ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+/* Button hover for T&Cs & FAQ */
+#termsBtn:hover, #faqBtn:hover {
   background-color: #e6c200;
+  transform: translateY(-2px);
+  transition: 0.3s;
 }
 
+/* Scrollbar for modals */
+.modal-content::-webkit-scrollbar, 
+.terms-content::-webkit-scrollbar, 
+.faq-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-content::-webkit-scrollbar-track, 
+.terms-content::-webkit-scrollbar-track, 
+.faq-content::-webkit-scrollbar-track {
+  background: #f5f0ff;
+  border-radius: 5px;
+}
+
+.modal-content::-webkit-scrollbar-thumb, 
+.terms-content::-webkit-scrollbar-thumb, 
+.faq-content::-webkit-scrollbar-thumb {
+  background: #4B0082;
+  border-radius: 5px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover, 
+.terms-content::-webkit-scrollbar-thumb:hover, 
+.faq-content::-webkit-scrollbar-thumb:hover {
+  background: #3b1a6b;
+}
 
 /* Responsive */
 @media (min-width: 768px) {
@@ -298,7 +334,6 @@ footer p {
   }
 }
 
-/* Mobile adjustments */
 @media (max-width: 600px) {
   .navbar .container {
     flex-direction: column;
@@ -323,5 +358,18 @@ footer p {
   footer .logos {
     flex-direction: column;
     gap: 15px;
+  }
+
+  .modal-content, .terms-content, .faq-content {
+    padding: 1.5rem;
+    max-height: 85vh;
+  }
+
+  .terms-text h4, .faq-text h4 {
+    font-size: 1rem;
+  }
+
+  .terms-text p, .faq-text p, .faq-text ul {
+    font-size: 0.9rem;
   }
 }
