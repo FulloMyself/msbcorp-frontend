@@ -13,17 +13,15 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 20px;
-      background-color: #4B0082; /* Purple */
+      background-color: #4B0082;
       color: white;
     }
-
     .nav-links {
       display: flex;
       list-style: none;
       gap: 20px;
       align-items: center;
     }
-
     .nav-links li a,
     .nav-links li button {
       color: white;
@@ -34,68 +32,27 @@
       cursor: pointer;
     }
 
-    /* Footer styling */
-    footer {
-      background-color: #4B0082; /* deep purple */
-      color: white;
+    /* Hero / Info / About */
+    .hero, .info, .about {
       text-align: center;
-      padding: 20px 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
+      padding: 40px 20px;
     }
-
-    footer img {
-      height: 50px;
-      margin: 5px;
-    }
-
-    footer .logos {
+    .steps {
       display: flex;
       justify-content: center;
-      align-items: center;
-      gap: 30px;
+      gap: 20px;
       flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .step {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      min-width: 200px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
-    footer p {
-      margin: 5px 0;
-      font-size: 0.9rem;
-    }
-
-    /* Mobile adjustments */
-    @media(max-width: 600px) {
-      .navbar {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-      }
-
-      .nav-links {
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-      }
-
-      #loginBtn {
-        width: 80%;
-        max-width: 200px;
-        margin: 0 auto;
-        padding: 10px 0;
-        border-radius: 8px;
-        background-color: gold;
-        color: #4B0082;
-        font-weight: bold;
-      }
-
-      footer .logos {
-        flex-direction: column;
-        gap: 15px;
-      }
-    }
-
-    /* Buttons for hero/apply */
+    /* Buttons */
     .btn {
       padding: 10px 20px;
       border-radius: 8px;
@@ -106,31 +63,59 @@
       color: #4B0082;
     }
 
-    .hero, .info, .about {
+    /* Footer */
+    footer {
+      background-color: #4B0082;
+      color: white;
       text-align: center;
-      padding: 40px 20px;
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
-
-    .steps {
+    footer img {
+      height: 50px;
+      margin: 5px;
+    }
+    footer .logos {
       display: flex;
       justify-content: center;
-      gap: 20px;
+      align-items: center;
+      gap: 30px;
       flex-wrap: wrap;
-      margin-top: 20px;
+    }
+    footer p {
+      margin: 5px 0;
+      font-size: 0.9rem;
     }
 
-    .step {
-      background-color: white;
-      padding: 20px;
-      border-radius: 12px;
-      min-width: 200px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    /* Mobile */
+    @media(max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+      .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+      }
+      #loginBtn {
+        width: 80%;
+        max-width: 200px;
+        margin: 0 auto;
+      }
+      footer .logos {
+        flex-direction: column;
+        gap: 15px;
+      }
     }
   </style>
 </head>
 <body>
-
-  <!-- Sticky Navbar -->
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="container">
       <h1>MSB Finance</h1>
@@ -144,7 +129,7 @@
   </nav>
 
   <main>
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section id="hero" class="hero">
       <h2>Loans Made Simple</h2>
       <p>We provide quick loans from <strong>R300 - R4000</strong> with easy application and instant approval.</p>
@@ -170,7 +155,7 @@
       </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About -->
     <section id="about" class="about">
       <h3>About MSB Finance</h3>
       <p>MSB Finance is a trusted South African financial services platform that helps you access small loans quickly and securely. Our mission is to make borrowing easy, transparent, and convenient for everyone.</p>
@@ -218,49 +203,7 @@
     <p>© 2025 MSB Finance. All rights reserved.</p>
   </footer>
 
-  <script>
-    // Smooth scroll for nav links
-    document.querySelectorAll('.nav-links a').forEach(anchor => {
-      anchor.addEventListener('click', function(e){
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-      });
-    });
-
-    // Modal logic
-    const loginModal = document.getElementById("loginModal");
-    const registerModal = document.getElementById("registerModal");
-    const loginBtn = document.getElementById("loginBtn");
-    const applyNowBtn = document.getElementById("applyNowBtn");
-    const showRegisterLink = document.getElementById("showRegister");
-    const showLoginLink = document.getElementById("showLogin");
-
-    // Open modals
-    loginBtn.addEventListener("click", () => loginModal.style.display = "block");
-    applyNowBtn.addEventListener("click", () => registerModal.style.display = "block");
-
-    // Toggle modals
-    showRegisterLink.addEventListener("click", () => {
-      loginModal.style.display = "none";
-      registerModal.style.display = "block";
-    });
-    showLoginLink.addEventListener("click", () => {
-      registerModal.style.display = "none";
-      loginModal.style.display = "block";
-    });
-
-    // Close buttons
-    document.querySelectorAll(".modal .close").forEach(btn => {
-      btn.addEventListener("click", () => {
-        btn.parentElement.parentElement.style.display = "none";
-      });
-    });
-
-    // Click outside modal to close
-    window.addEventListener("click", (e) => {
-      if (e.target === loginModal) loginModal.style.display = "none";
-      if (e.target === registerModal) registerModal.style.display = "none";
-    });
-  </script>
+  <!-- Include main.js only -->
+  <script src="main.js"></script>
 </body>
 </html>
