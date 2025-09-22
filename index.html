@@ -233,6 +233,50 @@
   </div>
 </div>
 
+<!-- Loan Calculator Section -->
+<section id="calculator" class="calculator-section">
+  <div class="container">
+    <h3>Loan Calculator</h3>
+    <p>Calculate your loan repayment amount for a 30-day term</p>
+    
+    <div class="calculator-container">
+      <!-- Slider -->
+      <div class="slider-container">
+        <label for="loanSlider">Loan Amount:</label>
+        <input type="range" id="loanSlider" min="300" max="4000" value="1000" step="50">
+        <div class="slider-value">
+          <span id="sliderAmount">R1,000</span>
+        </div>
+      </div>
+
+      <!-- Calculation Display -->
+      <div class="calculation-display">
+        <div class="calc-row">
+          <span class="calc-label">Loan Amount:</span>
+          <span id="displayAmount" class="calc-value">R1,000</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Interest (30%):</span>
+          <span id="displayInterest" class="calc-value">R300</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Loan Term:</span>
+          <span class="calc-value">30 Days</span>
+        </div>
+        <div class="calc-row total-row">
+          <span class="calc-label">Total Repayment:</span>
+          <span id="displayTotal" class="calc-value">R1,300</span>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="calculator-cta">
+        <p class="calc-note">Ready to apply? Register now to get started!</p>
+        <button id="calcApplyBtn" class="btn">Apply for This Loan</button>
+      </div>
+    </div>
+  </div>
+</section>
 
   <!-- Footer -->
   <footer class="footer">
