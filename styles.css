@@ -202,6 +202,7 @@ footer p {
 }
 
 /* Modal */
+/* Modal (already exists) */
 .modal {
   display: none;
   position: fixed;
@@ -212,6 +213,7 @@ footer p {
   background: rgba(0,0,0,0.5);
   justify-content: center;
   align-items: center;
+  z-index: 1001; /* higher than navbar */
 }
 
 .modal-content {
@@ -220,7 +222,7 @@ footer p {
   padding: 2rem;
   border-radius: 10px;
   width: 90%;
-  max-width: 400px;
+  max-width: 600px;
   position: relative;
 }
 
@@ -232,11 +234,61 @@ footer p {
   cursor: pointer;
 }
 
+.modal-text {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+
 .link {
   color: #3b1a6b;
   cursor: pointer;
   font-weight: bold;
 }
+
+/* Terms & Conditions Modal */
+.terms-content {
+  max-height: 80vh; /* modal max height */
+  overflow-y: auto; /* scrollable content */
+  padding: 2rem;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #3b1a6b;
+  width: 90%;
+  max-width: 600px;
+}
+
+/* Smooth scroll inside modal */
+.terms-text {
+  scroll-behavior: smooth;
+  line-height: 1.6;
+}
+
+.terms-text h4 {
+  margin-top: 1rem;
+  color: #4B0082;
+}
+
+.terms-text p {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+/* Close button */
+.terms-content .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #4B0082;
+}
+
+/* Button hover */
+#termsBtn:hover {
+  background-color: #e6c200;
+}
+
 
 /* Responsive */
 @media (min-width: 768px) {

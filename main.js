@@ -6,6 +6,8 @@ const showRegister = document.getElementById('showRegister');
 const showLogin = document.getElementById('showLogin');
 const applyNowBtn = document.getElementById('applyNowBtn');
 const closeButtons = document.querySelectorAll('.close');
+const termsBtn = document.getElementById('termsBtn');
+const termsModal = document.getElementById('termsModal');
 
 // ---------------- MODAL TOGGLE ----------------
 
@@ -43,6 +45,24 @@ window.addEventListener('click', e => {
   if (e.target === loginModal) loginModal.style.display = 'none';
   if (e.target === registerModal) registerModal.style.display = 'none';
 });
+
+// Open modal
+termsBtn.onclick = () => {
+  termsModal.style.display = 'flex';
+};
+
+// Close modal (reusing existing close button code)
+termsModal.querySelector('.close').onclick = () => {
+  termsModal.style.display = 'none';
+};
+
+// Close modal when clicking outside content
+window.onclick = (e) => {
+  if (e.target === termsModal) {
+    termsModal.style.display = 'none';
+  }
+};
+
 
 // ---------------- SMOOTH SCROLL ----------------
 document.querySelectorAll('.nav-links a').forEach(anchor => {
