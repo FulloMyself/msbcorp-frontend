@@ -14,33 +14,47 @@
   </header>
 
   <main>
-
     <div class="stats-container">
-  <div class="stat-card">
-    <h3>Total Loans</h3>
-    <p id="totalLoans">0</p>
-  </div>
-  <div class="stat-card">
-    <h3>Documents Uploaded</h3>
-    <p id="totalDocs">0</p>
-  </div>
-  <div class="stat-card">
-    <h3>Total Loan Amount</h3>
-    <p id="totalLoanAmount">R0</p>
-  </div>
-</div>
+      <div class="stat-card">
+        <h3>Total Loans</h3>
+        <p id="totalLoans">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Documents Uploaded</h3>
+        <p id="totalDocs">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Total Loan Amount</h3>
+        <p id="totalLoanAmount">R0</p>
+      </div>
+    </div>
 
-<div class="quick-links">
-  <a href="#loansSection" class="quick-link">My Loans</a>
-  <a href="#documentsSection" class="quick-link">My Documents</a>
-  <a href="#applyLoanSection" class="quick-link">Apply for Loan</a>
-</div>
+    <div class="quick-links">
+      <a href="#loansSection" class="quick-link">My Loans</a>
+      <a href="#documentsSection" class="quick-link">My Documents</a>
+      <a href="#applyLoanSection" class="quick-link">Apply for Loan</a>
+    </div>
 
-<section id="applyLoanSection">
+    <section id="applyLoanSection">
       <h2>Apply for Loan</h2>
       <input type="number" id="loanAmount" placeholder="Loan Amount (R300 - R4000)">
       <button id="applyLoanBtn">Apply</button>
     </section>
+
+    <!-- Bank Details Modal -->
+    <div id="bankModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Enter Bank Details</h3>
+          <span class="close-btn" id="closeBankModal">&times;</span>
+        </div>
+        <input type="text" id="bankName" placeholder="Bank Name">
+        <input type="text" id="accountNumber" placeholder="Account Number">
+        <input type="text" id="branchCode" placeholder="Branch Code">
+        <input type="text" id="accountHolder" placeholder="Account Holder">
+        <button id="submitBankDetailsBtn">Submit</button>
+      </div>
+    </div>
 
     <section id="documentsSection">
       <h2>Upload Document</h2>
