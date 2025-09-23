@@ -177,7 +177,25 @@ async function loadStats() {
   }
 }
 
-
+// Send notification emails to both user and admin
+async function sendNotificationEmails(amount, bankDetails) {
+  try {
+    await fetch(`${API}/user/send-loan-notifications`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ 
+        amount,
+        bankDetails
+      })
+    });
+  } catch (err) {
+    console.error('Email notification error:', err);
+    // Don't show error to user as loan was still processed
+  }
+}
 
 // Initial load
 loadLoans();
