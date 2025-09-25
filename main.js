@@ -16,6 +16,7 @@ const loanSlider = document.getElementById('loanSlider');
   const displayInterest = document.getElementById('displayInterest');
   const displayTotal = document.getElementById('displayTotal');
   const calcApplyBtn = document.getElementById('calcApplyBtn');
+const navLinks = document.getElementById("nav-links");
 
 // ---------------- MODAL TOGGLE ----------------
 
