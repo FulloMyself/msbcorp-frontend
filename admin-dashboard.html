@@ -86,30 +86,36 @@
   </main>
 
   <div id="changeDetailsModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h3>Update Your Details</h3>
+  <div class="modal-content">
+    <span id="closeChangeDetailsModal" class="close">&times;</span>
+    <h3>Update Your Details</h3>
 
-      <form id="changeDetailsForm">
-        <label>Full Name</label>
-        <input type="text" id="fullName" disabled />
+    <form id="changeDetailsForm">
+      <!-- Full Name (readonly) -->
+      <label>Full Name</label>
+      <input type="text" id="fullName" readonly />
 
-        <label>Phone Number</label>
-        <input type="text" id="contact" placeholder="Enter new phone number" />
+      <!-- Email (editable) -->
+      <label>Email Address</label>
+      <input type="email" id="email" placeholder="Enter new email address" required />
 
-        <label>Current Password</label>
-        <input type="password" id="currentPassword" placeholder="Enter current password" />
+      <!-- Current Password -->
+      <label>Current Password</label>
+      <input type="password" id="currentPassword" placeholder="Enter current password" required />
 
-        <label>New Password</label>
-        <input type="password" id="newPassword" placeholder="Enter new password" />
+      <!-- New Password -->
+      <label>New Password</label>
+      <input type="password" id="newPassword" placeholder="Enter new password" />
 
-        <label>Confirm New Password</label>
-        <input type="password" id="confirmNewPassword" placeholder="Confirm new password" />
+      <!-- Confirm New Password -->
+      <label>Confirm New Password</label>
+      <input type="password" id="confirmNewPassword" placeholder="Confirm new password" />
 
-        <button type="submit" class="btn-gold">Save Changes</button>
-      </form>
-    </div>
+      <button type="submit" class="btn-gold">Save Changes</button>
+    </form>
   </div>
+</div>
+
 
 
   <script src="admin-dashboard.js"></script>

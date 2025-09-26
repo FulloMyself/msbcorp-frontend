@@ -3,22 +3,14 @@
 // -------------------------------
 
 // -------------------------------
-// Close buttons
-// -------------------------------
-const closeBankModal = document.getElementById("closeBankModal"); // if you have bank modal
-const closeChangeDetailsModal = document.getElementById("closeChangeDetailsModal"); // change details modal
-const term = 12; // or get from a new input field
-
-// -------------------------------
 // Token and API config
 // -------------------------------
 const token = localStorage.getItem("token");
 if (!token) window.location.href = "index.html";
 
-const API = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+const API = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "http://localhost:5000/api"
   : "https://msbcorp-backend.onrender.com/api";
-
 
 // -------------------------------
 // Logout
@@ -242,37 +234,43 @@ async function loadAdminStats() {
 const changeBtn = document.getElementById("changeDetailsBtn");
 const modal = document.getElementById("changeDetailsModal");
 const form = document.getElementById("changeDetailsForm");
+const closeChangeDetailsModal = document.getElementById("closeChangeDetailsModal");
 
 if (changeBtn && modal && form) {
+  // Open modal
   changeBtn.addEventListener("click", async () => {
     modal.style.display = "flex";
     try {
       const res = await fetch(`${API}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
-      document.getElementById("fullName").value = data.name;
-      document.getElementById("contact").value = data.contact;
+      document.getElementById("fullName").value = data.name || "";
+      document.getElementById("email").value = data.email || "";
     } catch (err) {
-      console.error("Error fetching user details:", err);
+      console.error("Failed to load user details", err);
     }
   });
 
-  if (closeChangeDetailsModal) {
-    closeChangeDetailsModal.addEventListener("click", () => {
-      modal.style.display = "none";
-    });
-  }
+  // Close modal
+  closeChangeDetailsModal?.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) modal.style.display = "none";
+  });
 
+  // Submit form
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    const currentPassword = document.getElementById("currentPassword").value.trim();
+    const newPassword = document.getElementById("newPassword").value.trim();
+    const confirmPassword = document.getElementById("confirmNewPassword").value.trim();
 
-    const contact = document.getElementById("contact").value;
-    const currentPassword = document.getElementById("currentPassword").value;
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmNewPassword = document.getElementById("confirmNewPassword").value;
-
-    if (newPassword && newPassword !== confirmNewPassword) {
-      alert("New password does not match confirmation");
-      return;
+    // Validate password change
+    if (newPassword || confirmPassword) {
+      if (!currentPassword) return alert("Enter your current password to change password");
+      if (newPassword.length < 6) return alert("New password must be at least 6 characters");
+      if (newPassword !== confirmPassword) return alert("New password and confirm password do not match");
     }
 
     try {
@@ -282,25 +280,26 @@ if (changeBtn && modal && form) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ contact, currentPassword, newPassword }),
+        body: JSON.stringify({
+          email,
+          currentPassword: currentPassword || undefined,
+          newPassword: newPassword || undefined,
+        }),
       });
-
-      const result = await res.json();
-      if (res.ok) {
-        alert("Details updated successfully");
-        modal.style.display = "none";
-        form.reset();
-      } else {
-        alert(result.message || "Error updating details");
-      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Update failed");
+      alert(data.message || "Details updated successfully");
+      modal.style.display = "none";
+      form.reset();
     } catch (err) {
-      console.error("Error updating details:", err);
+      console.error("Update error:", err);
+      alert(err.message || "Failed to update details");
     }
   });
 }
 
 // -------------------------------
-// Initial load
+// Initial Load
 // -------------------------------
 loadUsers();
 loadLoans();
