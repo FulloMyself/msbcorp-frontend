@@ -236,75 +236,79 @@ async function loadAdminStats() {
   }
 }
 
-// -------------------------------
-// Change Details Modal
-// -------------------------------
-const changeBtn = document.getElementById("changeDetailsBtn");
-const modal = document.getElementById("changeDetailsModal");
-const form = document.getElementById("changeDetailsForm");
-const closeChangeDetailsModal = document.getElementById("closeChangeDetailsModal");
+// --------------------
+  // Change Details Modal
+  // --------------------
+  const changeBtn = document.getElementById("changeDetailsBtn");
+  const changeModal = document.getElementById("changeDetailsModal");
+  const changeForm = document.getElementById("changeDetailsForm");
+  const closeChangeModal = changeModal?.querySelector(".close");
 
-if (changeBtn && modal && form) {
-  // Open modal
-  changeBtn.addEventListener("click", async () => {
-    modal.style.display = "flex";
-    try {
-      const res = await fetch(`${API}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-      const data = await res.json();
-      document.getElementById("fullName").value = data.name || "";
-      document.getElementById("email").value = data.email || "";
-    } catch (err) {
-      console.error("Failed to load user details", err);
-    }
-  });
+  if (changeBtn && changeModal && changeForm) {
+    // Open modal
+    changeBtn.addEventListener("click", async () => {
+      changeModal.style.display = "flex";
+      try {
+        const data = await apiFetch(`${API}/user/me`);
+        document.getElementById("fullName").value = data.name;
+        document.getElementById("email").value = data.email || "";
+      } catch (err) {
+        console.error("Failed to load user details", err);
+      }
+    });
 
-  // Close modal
-  closeChangeDetailsModal?.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-  window.addEventListener("click", (e) => {
-    if (e.target === modal) modal.style.display = "none";
-  });
+    // Close modal (x button)
+    closeChangeModal?.addEventListener("click", () => {
+      changeModal.style.display = "none";
+    });
 
-  // Submit form
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("email").value.trim();
-    const currentPassword = document.getElementById("currentPassword").value.trim();
-    const newPassword = document.getElementById("newPassword").value.trim();
-    const confirmPassword = document.getElementById("confirmNewPassword").value.trim();
+    // Close if clicking outside modal
+    window.addEventListener("click", (e) => {
+      if (e.target === changeModal) changeModal.style.display = "none";
+    });
 
-    // Validate password change
-    if (newPassword || confirmPassword) {
-      if (!currentPassword) return alert("Enter your current password to change password");
-      if (newPassword.length < 6) return alert("New password must be at least 6 characters");
-      if (newPassword !== confirmPassword) return alert("New password and confirm password do not match");
-    }
+    // Submit changes
+    changeForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const currentPassword = document.getElementById("currentPassword").value.trim();
+      const newPassword = document.getElementById("newPassword").value.trim();
+      const confirmPassword = document.getElementById("confirmNewPassword").value.trim();
 
-    try {
-      const res = await fetch(`${API}/user/update-details`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          email,
-          currentPassword: currentPassword || undefined,
-          newPassword: newPassword || undefined,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Update failed");
-      alert(data.message || "Details updated successfully");
-      modal.style.display = "none";
-      form.reset();
-    } catch (err) {
-      console.error("Update error:", err);
-      alert(err.message || "Failed to update details");
-    }
-  });
-}
+      if (!email && !newPassword) return alert("Enter new details to update.");
+
+      // If changing password, current password is required
+      if ((newPassword || confirmPassword) && !currentPassword) {
+        return alert("Enter your current password to change password.");
+      }
+
+      // Validate password
+      if (newPassword || confirmPassword) {
+        if (newPassword.length < 6) return alert("New password must be at least 6 characters.");
+        if (newPassword !== confirmPassword) return alert("New password and confirmation do not match.");
+      }
+
+      try {
+        const res = await apiFetch(`${API}/user/update-details`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            currentPassword,
+            newPassword,
+            confirmNewPassword: confirmPassword,
+          }),
+        });
+
+        alert(res.message || "Details updated successfully");
+        changeModal.style.display = "none";
+        changeForm.reset();
+      } catch (err) {
+        console.error("Update failed", err);
+        alert(err.message || "Failed to update details");
+      }
+    });
+  }
 
 // -------------------------------
 // Initial Load

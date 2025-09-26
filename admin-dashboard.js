@@ -242,7 +242,7 @@ async function loadAdminStats() {
 const changeBtn = document.getElementById("changeDetailsBtn");
 const modal = document.getElementById("changeDetailsModal");
 const form = document.getElementById("changeDetailsForm");
-const closeChangeDetailsModal = document.getElementById("closeChangeDetailsModal");
+const closeChangeDetailsModal = modal?.querySelector(".close");
 
 if (changeBtn && modal && form) {
   // Open modal
@@ -251,7 +251,7 @@ if (changeBtn && modal && form) {
     try {
       const res = await fetch(`${API}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
-      document.getElementById("fullName").value = data.name || "";
+      document.getElementById("fullName").value = data.name;
       document.getElementById("email").value = data.email || "";
     } catch (err) {
       console.error("Failed to load user details", err);
@@ -262,11 +262,12 @@ if (changeBtn && modal && form) {
   closeChangeDetailsModal?.addEventListener("click", () => {
     modal.style.display = "none";
   });
+
   window.addEventListener("click", (e) => {
     if (e.target === modal) modal.style.display = "none";
   });
 
-  // Submit form
+  // Submit changes
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = document.getElementById("email").value.trim();
@@ -274,37 +275,44 @@ if (changeBtn && modal && form) {
     const newPassword = document.getElementById("newPassword").value.trim();
     const confirmPassword = document.getElementById("confirmNewPassword").value.trim();
 
-    // Validate password change
+    if (!email && !newPassword) return alert("Enter new details to update.");
+
+    if ((newPassword || confirmPassword) && !currentPassword) {
+      return alert("Enter your current password to change password.");
+    }
+
     if (newPassword || confirmPassword) {
-      if (!currentPassword) return alert("Enter your current password to change password");
-      if (newPassword.length < 6) return alert("New password must be at least 6 characters");
-      if (newPassword !== confirmPassword) return alert("New password and confirm password do not match");
+      if (newPassword.length < 6) return alert("New password must be at least 6 characters.");
+      if (newPassword !== confirmPassword) return alert("New password and confirmation do not match.");
     }
 
     try {
       const res = await fetch(`${API}/user/update-details`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           email,
-          currentPassword: currentPassword || undefined,
-          newPassword: newPassword || undefined,
+          currentPassword,
+          newPassword,
+          confirmNewPassword: confirmPassword,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Update failed");
-      alert(data.message || "Details updated successfully");
-      modal.style.display = "none";
-      form.reset();
+
+      const result = await res.json();
+      if (res.ok) {
+        alert(result.message || "Details updated successfully");
+        modal.style.display = "none";
+        form.reset();
+      } else {
+        alert(result.message || "Error updating details");
+      }
     } catch (err) {
       console.error("Update error:", err);
-      alert(err.message || "Failed to update details");
+      alert("Failed to update details");
     }
   });
 }
+
 
 // -------------------------------
 // Initial Load
