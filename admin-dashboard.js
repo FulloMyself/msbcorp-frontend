@@ -8,9 +8,17 @@
 const token = localStorage.getItem("token");
 if (!token) window.location.href = "index.html";
 
-const API = ["localhost", "127.0.0.1"].includes(window.location.hostname)
-  ? "http://localhost:5000/api"
-  : "https://msbcorp-backend.onrender.com/api";
+const hostname = window.location.hostname;
+let API = "";
+
+if (["localhost", "127.0.0.1"].includes(hostname)) {
+  API = "http://localhost:5000/api";
+} else if (hostname === "msbfinance.co.za") {
+  API = "https://msbcorp-backend.onrender.com/api"; // production backend
+} else {
+  API = "https://msbcorp-backend.onrender.com/api"; // fallback for other environments
+}
+
 
 // -------------------------------
 // Logout
