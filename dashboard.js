@@ -1,185 +1,239 @@
-const token = localStorage.getItem('token');
-if (!token) window.location.href = 'index.html';
+document.addEventListener("DOMContentLoaded", () => {
+  // --------------------
+  // Auth check
+  // --------------------
+  const token = localStorage.getItem("token");
+  if (!token) return (window.location.href = "index.html");
 
-const LOCAL = window.location.hostname === 'localhost';
-const API = LOCAL
-  ? 'http://localhost:5000/api'
-  : 'https://msbcorp-backend.onrender.com/api';
+  const LOCAL = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+  const API = LOCAL ? "http://localhost:5000/api" : "https://msbcorp-backend.onrender.com/api";
 
-// ===== Logout =====
-document.getElementById('logoutBtn').onclick = () => {
-  localStorage.clear();
-  window.location.href = 'index.html';
-};
+  // --------------------
+  // Utility: API fetch
+  // --------------------
+  async function apiFetch(url, options = {}) {
+    options.headers = options.headers || {};
+    if (!options.headers["Authorization"]) options.headers["Authorization"] = `Bearer ${token}`;
 
-// ===== Elements =====
-const applyLoanBtn = document.getElementById('applyLoanBtn');
-const bankModal = document.getElementById('bankModal');
-const closeModal = document.getElementById('closeBankModal');
-const submitBankBtn = document.getElementById('submitBankDetailsBtn');
-
-// ===== Modal Logic =====
-applyLoanBtn.onclick = () => bankModal.style.display = 'block';
-closeModal.onclick = () => bankModal.style.display = 'none';
-window.onclick = (e) => { if (e.target === bankModal) bankModal.style.display = 'none'; };
-
-// ===== Utility: Fetch Wrapper =====
-async function apiFetch(url, options = {}) {
-  options.headers = options.headers || {};
-  if (!options.headers['Authorization']) options.headers['Authorization'] = `Bearer ${token}`;
-
-  try {
-    const res = await fetch(url, options);
-
-    // handle non-JSON responses (like 404 returning HTML)
-    const contentType = res.headers.get('content-type');
-    const data = contentType && contentType.includes('application/json')
-      ? await res.json()
-      : null;
-
-    if (!res.ok) {
-      const message = data?.message || `Request failed with status ${res.status}`;
-      throw new Error(message);
+    try {
+      const res = await fetch(url, options);
+      const data = res.headers.get("content-type")?.includes("application/json") ? await res.json() : null;
+      if (!res.ok) throw new Error(data?.message || `Request failed with status ${res.status}`);
+      return data;
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "An error occurred");
+      throw err;
     }
-
-    return data;
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-    throw err;
-  }
-}
-
-// ===== Submit Loan Application =====
-submitBankBtn.onclick = async () => {
-  const amountInput = document.getElementById('loanAmount');
-  const amount = parseFloat(amountInput.value.trim());
-
-  const bankDetails = {
-    bankName: document.getElementById('bankName').value.trim(),
-    accountNumber: document.getElementById('accountNumber').value.trim(),
-    branchCode: document.getElementById('branchCode').value.trim(),
-    accountHolder: document.getElementById('accountHolder').value.trim()
-  };
-
-  // Validation
-  if (!amount || amount < 300 || amount > 4000) {
-    return alert('Enter a valid amount (R300-R4000)');
-  }
-  if (!Object.values(bankDetails).every(v => v)) {
-    return alert('Please fill in all bank details');
   }
 
-  // Disable button to prevent multiple submissions
-  submitBankBtn.disabled = true;
-  submitBankBtn.textContent = 'Submitting...';
+  // --------------------
+  // Logout
+  // --------------------
+  document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "index.html";
+  });
 
-  try {
-    const response = await apiFetch(`${API}/user/apply-loan`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount, bankDetails })
+  // --------------------
+  // Change Details Modal
+  // --------------------
+  const changeBtn = document.getElementById("changeDetailsBtn");
+  const changeModal = document.getElementById("changeDetailsModal");
+  const changeForm = document.getElementById("changeDetailsForm");
+  const closeChangeModal = changeModal?.querySelector(".close");
+
+  if (changeBtn && changeModal && changeForm) {
+    changeBtn.addEventListener("click", async () => {
+      changeModal.style.display = "flex";
+      try {
+        const data = await apiFetch(`${API}/user/me`);
+        document.getElementById("fullName").value = data.name;
+        document.getElementById("contact").value = data.contact || "";
+      } catch (err) {
+        console.error("Failed to load user details", err);
+      }
     });
 
-    alert(response.message || 'Loan applied successfully');
-    bankModal.style.display = 'none';
-    amountInput.value = '';
-    Object.keys(bankDetails).forEach(key => document.getElementById(key).value = '');
-    await refreshAll();
+    closeChangeModal?.addEventListener("click", () => (changeModal.style.display = "none"));
 
-  } catch (err) {
-    console.error(err);
-    // Error alert handled inside apiFetch
-  } finally {
-    // Re-enable button
-    submitBankBtn.disabled = false;
-    submitBankBtn.textContent = 'Submit Loan';
+    changeForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const contact = document.getElementById("contact").value.trim();
+      const currentPassword = document.getElementById("currentPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const confirmPassword = document.getElementById("confirmNewPassword").value;
+
+      if (newPassword && newPassword !== confirmPassword) return alert("New password does not match");
+
+      try {
+        const res = await apiFetch(`${API}/user/update-details`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contact, currentPassword, newPassword }),
+        });
+        alert(res.message || "Details updated successfully");
+        changeModal.style.display = "none";
+        changeForm.reset();
+      } catch (err) {
+        console.error("Update failed", err);
+      }
+    });
   }
-};
 
+  // --------------------
+  // Apply Loan
+  // --------------------
+  const applyLoanBtn = document.getElementById("applyLoanBtn");
+  const bankModal = document.getElementById("bankModal");
+  const closeBankModal = document.getElementById("closeBankModal");
+  const submitLoanBtn = document.getElementById("submitBankDetailsBtn");
 
+  if (applyLoanBtn && bankModal && closeBankModal && submitLoanBtn) {
+    // Open bank modal only if amount is valid
+    applyLoanBtn.addEventListener("click", () => {
+      const amountInput = Number(document.getElementById("loanAmount").value.trim());
+      if (!amountInput || amountInput < 300 || amountInput > 4000) {
+        return alert("Enter a valid loan amount between R300 and R4000");
+      }
+      bankModal.dataset.amount = amountInput; // store amount
+      bankModal.style.display = "block";
+    });
 
-// ===== Upload Document =====
-document.getElementById('uploadDocBtn').onclick = async () => {
-  const fileInput = document.getElementById('docFile');
-  if (!fileInput.files.length) return alert('Select a file');
+    // Close modal
+    closeBankModal.addEventListener("click", () => (bankModal.style.display = "none"));
+    window.addEventListener("click", (e) => e.target === bankModal && (bankModal.style.display = "none"));
 
-  const formData = new FormData();
-  formData.append('document', fileInput.files[0]);
+    // Submit loan
+    submitLoanBtn.addEventListener("click", async () => {
+      const amount = Number(document.getElementById("loanAmount").value.trim());
+      if (!amount || amount < 300 || amount > 4000) return alert("Enter a valid amount (R300-R4000)");
 
-  try {
-    await apiFetch(`${API}/user/upload-document`, { method: 'POST', body: formData });
-    alert('Document uploaded successfully');
-    await refreshAll();
-  } catch (err) {
-    // handled
+      const bankFields = ["bankName", "accountNumber", "branchCode", "accountHolder"];
+      const bankDetails = {};
+      for (const id of bankFields) {
+        const val = document.getElementById(id).value.trim();
+        if (!val) return alert("Fill all bank details");
+        bankDetails[id] = val;
+      }
+
+      const term = 12;
+      submitLoanBtn.disabled = true;
+      submitLoanBtn.textContent = "Submitting...";
+
+      try {
+        const res = await apiFetch(`${API}/user/apply-loan`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount, bankDetails, term }),
+        });
+
+        alert(res.message || "Loan applied successfully");
+        bankModal.style.display = "none";
+        document.getElementById("loanAmount").value = "";
+        bankFields.forEach((id) => (document.getElementById(id).value = ""));
+        await refreshAll();
+      } catch (err) {
+        console.error("Loan application failed", err);
+        alert(err.message || "Failed to apply loan");
+      } finally {
+        submitLoanBtn.disabled = false;
+        submitLoanBtn.textContent = "Submit";
+      }
+    });
   }
-};
 
-// ===== Load Loans =====
-async function loadLoans() {
-  const loans = await apiFetch(`${API}/user/loans`);
-  const tbody = document.querySelector('#loansTable tbody');
-  tbody.innerHTML = '';
-  loans.forEach(l => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>R${l.amount}</td>
-      <td>${l.status || 'Pending'}</td>
-      <td>${new Date(l.createdAt).toLocaleString()}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
+  // --------------------
+  // Upload Document
+  // --------------------
+  document.getElementById("uploadDocBtn")?.addEventListener("click", async () => {
+    const fileInput = document.getElementById("docFile");
+    if (!fileInput?.files?.length) return alert("Select a file");
 
-// ===== Load Documents =====
-async function loadDocs() {
-  const docs = await apiFetch(`${API}/user/documents`);
-  const tbody = document.querySelector('#docsTable tbody');
-  tbody.innerHTML = '';
+    const formData = new FormData();
+    formData.append("document", fileInput.files[0]);
 
-  docs.forEach(d => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${d.fileName}</td>
-      <td>${d.status || 'Pending'}</td>
-      <td>${new Date(d.createdAt).toLocaleString()}</td>
-      <td>
-        <button class="openDocBtn" data-id="${d._id}">Open</button>
-        <button class="deleteDocBtn" data-id="${d._id}">Delete</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
+    try {
+      await apiFetch(`${API}/user/upload-document`, { method: "POST", body: formData });
+      alert("Document uploaded successfully");
+      await refreshAll();
+    } catch (err) {
+      console.error("Upload failed", err);
+    }
   });
 
-  tbody.querySelectorAll('.openDocBtn').forEach(btn => btn.onclick = async () => {
-    const data = await apiFetch(`${API}/user/documents/${btn.dataset.id}/download`);
-    window.open(data.url, '_blank');
-  });
+  // --------------------
+  // Load Loans
+  // --------------------
+  async function loadLoans() {
+    const loansTable = document.querySelector("#loansTable tbody");
+    if (!loansTable) return;
 
-  tbody.querySelectorAll('.deleteDocBtn').forEach(btn => btn.onclick = async () => {
-    if (!confirm('Are you sure you want to delete this document?')) return;
-    await apiFetch(`${API}/user/documents/${btn.dataset.id}`, { method: 'DELETE' });
-    await refreshAll();
-  });
-}
+    const loans = await apiFetch(`${API}/user/loans`);
+    loansTable.innerHTML = loans
+      .map((l) => `<tr>
+          <td>R${l.amount}</td>
+          <td>${l.status || "Pending"}</td>
+          <td>${new Date(l.createdAt).toLocaleString()}</td>
+        </tr>`)
+      .join("");
+  }
 
-// ===== Load Stats =====
-async function loadStats() {
-  const [loans, docs] = await Promise.all([
-    apiFetch(`${API}/user/loans`),
-    apiFetch(`${API}/user/documents`)
-  ]);
+  // --------------------
+  // Load Documents
+  // --------------------
+  async function loadDocs() {
+    const docsTable = document.querySelector("#docsTable tbody");
+    if (!docsTable) return;
 
-  document.getElementById('totalLoans').textContent = loans.length;
-  document.getElementById('totalLoanAmount').textContent = `R${loans.reduce((sum, l) => sum + l.amount, 0)}`;
-  document.getElementById('totalDocs').textContent = docs.length;
-}
+    const docs = await apiFetch(`${API}/user/documents`);
+    docsTable.innerHTML = docs
+      .map((d) => `<tr>
+          <td>${d.fileName}</td>
+          <td>${d.status || "Pending"}</td>
+          <td>${new Date(d.createdAt).toLocaleString()}</td>
+          <td>
+            <button class="openDocBtn" data-url="${d.signedUrl}">Open</button>
+            <button class="deleteDocBtn" data-id="${d._id}">Delete</button>
+          </td>
+        </tr>`)
+      .join("");
 
-// ===== Refresh All =====
-async function refreshAll() {
-  await Promise.all([loadLoans(), loadDocs(), loadStats()]);
-}
+    docsTable.querySelectorAll(".openDocBtn").forEach((btn) => {
+      btn.onclick = () => window.open(btn.dataset.url, "_blank");
+    });
+    docsTable.querySelectorAll(".deleteDocBtn").forEach((btn) => {
+      btn.onclick = async () => {
+        if (!confirm("Are you sure you want to delete this document?")) return;
+        await apiFetch(`${API}/user/documents/${btn.dataset.id}`, { method: "DELETE" });
+        await refreshAll();
+      };
+    });
+  }
 
-// ===== Initial Load =====
-refreshAll();
+  // --------------------
+  // Load Stats
+  // --------------------
+  async function loadStats() {
+    const totalLoansEl = document.getElementById("totalLoans");
+    const totalLoanAmountEl = document.getElementById("totalLoanAmount");
+    const totalDocsEl = document.getElementById("totalDocs");
+
+    const [loans, docs] = await Promise.all([apiFetch(`${API}/user/loans`), apiFetch(`${API}/user/documents`)]);
+    totalLoansEl && (totalLoansEl.textContent = loans.length);
+    totalLoanAmountEl && (totalLoanAmountEl.textContent = `R${loans.reduce((sum, l) => sum + l.amount, 0)}`);
+    totalDocsEl && (totalDocsEl.textContent = docs.length);
+  }
+
+  // --------------------
+  // Refresh All
+  // --------------------
+  async function refreshAll() {
+    await Promise.all([loadLoans(), loadDocs(), loadStats()]);
+  }
+
+  // --------------------
+  // Initial load
+  // --------------------
+  refreshAll();
+});

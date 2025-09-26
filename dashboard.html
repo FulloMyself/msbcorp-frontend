@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,11 @@
   <link rel="stylesheet" href="dashboard.css">
   <link rel="icon" type="image/ico" href="favicon.ico">
 </head>
+
 <body>
   <header>
     <h1>User Dashboard</h1>
+    <button id="changeDetailsBtn" class="btn-gold">Change Details</button>
     <button id="logoutBtn">Logout</button>
   </header>
 
@@ -56,6 +59,33 @@
       </div>
     </div>
 
+    <div id="changeDetailsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Update Your Details</h3>
+
+        <form id="changeDetailsForm">
+          <label>Full Name</label>
+          <input type="text" id="fullName" disabled />
+
+          <label>Phone Number</label>
+          <input type="text" id="contact" placeholder="Enter new phone number" />
+
+          <label>Current Password</label>
+          <input type="password" id="currentPassword" placeholder="Enter current password" />
+
+          <label>New Password</label>
+          <input type="password" id="newPassword" placeholder="Enter new password" />
+
+          <label>Confirm New Password</label>
+          <input type="password" id="confirmNewPassword" placeholder="Confirm new password" />
+
+          <button type="submit" class="btn-gold">Save Changes</button>
+        </form>
+      </div>
+    </div>
+
+
     <section id="documentsSection">
       <h2>Upload Document</h2>
       <input type="file" id="docFile">
@@ -66,7 +96,11 @@
       <h2>Your Loans</h2>
       <table border="1" id="loansTable">
         <thead>
-          <tr><th>Amount</th><th>Status</th><th>Applied On</th></tr>
+          <tr>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Applied On</th>
+          </tr>
         </thead>
         <tbody></tbody>
       </table>
@@ -76,7 +110,12 @@
       <h2>Your Documents</h2>
       <table border="1" id="docsTable">
         <thead>
-          <tr><th>File</th><th>Status</th><th>Uploaded On</th><th>Actions</th></tr>
+          <tr>
+            <th>File</th>
+            <th>Status</th>
+            <th>Uploaded On</th>
+            <th>Actions</th>
+          </tr>
         </thead>
         <tbody></tbody>
       </table>
@@ -85,4 +124,5 @@
 
   <script src="dashboard.js"></script>
 </body>
+
 </html>
