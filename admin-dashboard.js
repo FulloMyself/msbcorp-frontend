@@ -45,7 +45,11 @@ async function loadUsers() {
     tbody.innerHTML = "";
     users.forEach((u) => {
       const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${u.name}</td><td>${u.email}</td>`;
+      tr.innerHTML = `
+        <td>${u.name}</td>
+        <td>${u.email}</td>
+        <td>${u.contact || 'N/A'}</td>
+      `;
       tbody.appendChild(tr);
     });
   } catch (err) {

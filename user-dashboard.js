@@ -143,7 +143,8 @@
         }
       } catch (err) {
         console.error('Apply loan error', err);
-        alert('Server error');
+        alert('Unable to submit loan application. Please check your connection and try again.');
+        if (submitBankDetailsBtn) submitBankDetailsBtn.disabled = false;
       }
     });
   }
