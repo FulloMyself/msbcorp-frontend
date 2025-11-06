@@ -18,43 +18,67 @@ const loanSlider = document.getElementById('loanSlider');
   const calcApplyBtn = document.getElementById('calcApplyBtn');
 const navLinks = document.getElementById("nav-links");
 
+// Global logout button handler (works on user and admin pages)
+const globalLogoutBtn = document.getElementById('logoutBtn');
+if (globalLogoutBtn) {
+  globalLogoutBtn.addEventListener('click', () => {
+    try {
+      localStorage.clear();
+    } catch (e) {}
+    window.location.href = 'index.html';
+  });
+}
+
 // ---------------- MODAL TOGGLE ----------------
 
-// Show login modal from navbar
-loginBtn.addEventListener('click', () => {
-  loginModal.style.display = 'flex';
-});
+// Show login modal from navbar (if present)
+if (typeof loginBtn !== 'undefined' && loginBtn) {
+  if (loginModal) {
+    loginBtn.addEventListener('click', () => {
+      loginModal.style.display = 'flex';
+    });
+  }
+}
 
 // Show registration modal from login modal
-showRegister.addEventListener('click', () => {
-  loginModal.style.display = 'none';
-  registerModal.style.display = 'flex';
-});
+if (showRegister) {
+  showRegister.addEventListener('click', () => {
+    if (loginModal) loginModal.style.display = 'none';
+    if (registerModal) registerModal.style.display = 'flex';
+  });
+}
 
 // Show login modal from registration modal
-showLogin.addEventListener('click', () => {
-  registerModal.style.display = 'none';
-  loginModal.style.display = 'flex';
-});
+if (showLogin) {
+  showLogin.addEventListener('click', () => {
+    if (registerModal) registerModal.style.display = 'none';
+    if (loginModal) loginModal.style.display = 'flex';
+  });
+}
 
 // Show registration modal from "Apply Now" button
-applyNowBtn.addEventListener('click', () => {
-  registerModal.style.display = 'flex';
-});
+if (applyNowBtn) {
+  applyNowBtn.addEventListener('click', () => {
+    if (registerModal) registerModal.style.display = 'flex';
+  });
+}
 
 // Close modal buttons
-closeButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    btn.closest('.modal').style.display = 'none';
+if (closeButtons && closeButtons.length) {
+  closeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const modal = btn.closest('.modal');
+      if (modal) modal.style.display = 'none';
+    });
   });
-});
+}
 
 // Close modals when clicking outside
 window.addEventListener('click', e => {
-  if (e.target === loginModal) loginModal.style.display = 'none';
-  if (e.target === registerModal) registerModal.style.display = 'none';
-  if (e.target === termsModal) termsModal.style.display = 'none';
-  if (e.target === faqModal) faqModal.style.display = 'none';
+  if (e.target === loginModal && loginModal) loginModal.style.display = 'none';
+  if (e.target === registerModal && registerModal) registerModal.style.display = 'none';
+  if (e.target === termsModal && termsModal) termsModal.style.display = 'none';
+  if (e.target === faqModal && faqModal) faqModal.style.display = 'none';
 });
 
 function formatCurrency(amount) {
@@ -77,32 +101,39 @@ function formatCurrency(amount) {
     displayTotal.textContent = formatCurrency(total);
   }
 
-  loanSlider.addEventListener('input', updateCalculation);
+  if (loanSlider) loanSlider.addEventListener('input', updateCalculation);
 
   // Redirects to register modal when applying
-  calcApplyBtn.addEventListener('click', () => {
-    document.getElementById('registerModal').style.display = 'flex';
-  });
+  if (calcApplyBtn) {
+    calcApplyBtn.addEventListener('click', () => {
+      const reg = document.getElementById('registerModal');
+      if (reg) reg.style.display = 'flex';
+    });
+  }
 
-  // Initialize on load
-  updateCalculation();
+  // Initialize on load (only if slider exists)
+  if (loanSlider && sliderAmount && displayAmount && displayInterest && displayTotal) {
+    updateCalculation();
+  }
 
 // ---------------- TERMS & FAQ MODALS ----------------
-termsBtn.addEventListener('click', () => {
-  termsModal.style.display = 'flex';
-});
+if (termsBtn && termsModal) {
+  termsBtn.addEventListener('click', () => {
+    termsModal.style.display = 'flex';
+  });
 
-termsModal.querySelector('.close').addEventListener('click', () => {
-  termsModal.style.display = 'none';
-});
+  const termsClose = termsModal.querySelector('.close');
+  if (termsClose) termsClose.addEventListener('click', () => { termsModal.style.display = 'none'; });
+}
 
-faqBtn.addEventListener('click', () => {
-  faqModal.style.display = 'flex';
-});
+if (faqBtn && faqModal) {
+  faqBtn.addEventListener('click', () => {
+    faqModal.style.display = 'flex';
+  });
 
-faqModal.querySelector('.close').addEventListener('click', () => {
-  faqModal.style.display = 'none';
-});
+  const faqClose = faqModal.querySelector('.close');
+  if (faqClose) faqClose.addEventListener('click', () => { faqModal.style.display = 'none'; });
+}
 
 // ---------------- FAQ ACCORDION ----------------
 document.querySelectorAll('.faq-question').forEach(question => {
@@ -139,75 +170,87 @@ document.querySelectorAll('.nav-links a').forEach(anchor => {
 const API = 'https://msbcorp-backend.onrender.com/api';
 
 // ---------------- REGISTER ----------------
-document.getElementById('registerSubmit').addEventListener('click', async () => {
-  const name = document.getElementById('registerName').value.trim();
-  const email = document.getElementById('registerEmail').value.trim();
-  const contact = document.getElementById('registerContact').value.trim();
-  const password = document.getElementById('registerPassword').value;
-  const confirmPassword = document.getElementById('registerConfirmPassword').value;
+const registerSubmit = document.getElementById('registerSubmit');
+if (registerSubmit) {
+  registerSubmit.addEventListener('click', async () => {
+    const nameEl = document.getElementById('registerName');
+    const emailEl = document.getElementById('registerEmail');
+    const contactEl = document.getElementById('registerContact');
+    const passwordEl = document.getElementById('registerPassword');
+    const confirmEl = document.getElementById('registerConfirmPassword');
 
-  if (!name || !email || !contact || !password || !confirmPassword) {
-    return alert('All fields are required');
-  }
+    const name = nameEl?.value.trim();
+    const email = emailEl?.value.trim();
+    const contact = contactEl?.value.trim();
+    const password = passwordEl?.value;
+    const confirmPassword = confirmEl?.value;
 
-  if (password !== confirmPassword) return alert('Passwords do not match!');
-
-  const saPhoneRegex = /^(?:\+27|0)\d{9}$/;
-  if (!saPhoneRegex.test(contact)) {
-    return alert('Please enter a valid South African phone number (e.g., 0821234567 or +27821234567)');
-  }
-
-  try {
-    const res = await fetch(`${API}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, contact, password })
-    });
-
-    const data = await res.json();
-
-    if (data.token) {
-      alert('Registration successful');
-      registerModal.style.display = 'none';
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('role', data.user.role);
-      window.location.href = data.user.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html';
-    } else {
-      alert(data.message || 'Registration failed');
+    if (!name || !email || !contact || !password || !confirmPassword) {
+      return alert('All fields are required');
     }
-  } catch (err) {
-    console.error(err);
-    alert('Server error');
-  }
-});
+
+    if (password !== confirmPassword) return alert('Passwords do not match!');
+
+    const saPhoneRegex = /^(?:\+27|0)\d{9}$/;
+    if (!saPhoneRegex.test(contact)) {
+      return alert('Please enter a valid South African phone number (e.g., 0821234567 or +27821234567)');
+    }
+
+    try {
+      const res = await fetch(`${API}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, contact, password })
+      });
+
+      const data = await res.json();
+
+      if (data.token) {
+        alert('Registration successful');
+        if (registerModal) registerModal.style.display = 'none';
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('role', data.user.role);
+        window.location.href = data.user.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html';
+      } else {
+        alert(data.message || 'Registration failed');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Server error');
+    }
+  });
+}
 
 // ---------------- LOGIN ----------------
-document.getElementById('loginSubmit').addEventListener('click', async () => {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
+const loginSubmit = document.getElementById('loginSubmit');
+if (loginSubmit) {
+  loginSubmit.addEventListener('click', async () => {
+    const email = document.getElementById('loginEmail')?.value.trim();
+    const password = document.getElementById('loginPassword')?.value;
 
-  if (!email || !password) return alert('Email and password are required');
+    if (!email || !password) return alert('Email and password are required');
 
-  try {
-    const res = await fetch(`${API}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.token) {
-      alert('Login successful');
-      loginModal.style.display = 'none';
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('role', data.user.role);
-      window.location.href = data.user.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html';
-    } else {
-      alert(data.message || 'Login failed');
+      if (data.token) {
+        alert('Login successful');
+        if (loginModal) loginModal.style.display = 'none';
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('role', data.user.role);
+        window.location.href = data.user.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html';
+      } else {
+        alert(data.message || 'Login failed');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Server error');
     }
-  } catch (err) {
-    console.error(err);
-    alert('Server error');
-  }
-});
+  });
+}

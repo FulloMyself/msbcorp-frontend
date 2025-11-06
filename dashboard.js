@@ -19,6 +19,12 @@ if (["localhost", "127.0.0.1"].includes(hostname)) {
   API = "https://msbcorp-backend.onrender.com/api"; // fallback for other environments
 }
 
+// Check user role silently; normal users should be sent to the regular dashboard
+const userRole = localStorage.getItem('role');
+if (userRole !== 'admin') {
+  window.location.href = 'dashboard.html';
+} else {
+
 
 // -------------------------------
 // Logout
@@ -317,3 +323,5 @@ loadUsers();
 loadLoans();
 loadDocs();
 loadAdminStats();
+
+} // end admin-only block
