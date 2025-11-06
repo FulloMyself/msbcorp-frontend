@@ -117,6 +117,10 @@
 
   if (submitBankDetailsBtn) {
     submitBankDetailsBtn.addEventListener('click', async () => {
+      // Prevent duplicate submissions
+      submitBankDetailsBtn.disabled = true;
+      const originalText = submitBankDetailsBtn.textContent;
+      submitBankDetailsBtn.textContent = 'Submitting...';
       const amount = parseInt(loanAmountInput?.value || 0);
       const bankName = document.getElementById('bankName')?.value?.trim();
       const accountNumber = document.getElementById('accountNumber')?.value?.trim();
@@ -126,7 +130,7 @@
       if (!amount || amount < 300 || amount > 4000) return alert('Enter a loan amount between R300 and R4000');
       if (!bankName || !accountNumber || !branchCode || !accountHolder) return alert('Enter all bank details');
 
-      try {
+  try {
         const res = await fetch(`${apiBase}/user/apply-loan`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -144,7 +148,10 @@
       } catch (err) {
         console.error('Apply loan error', err);
         alert('Unable to submit loan application. Please check your connection and try again.');
-        if (submitBankDetailsBtn) submitBankDetailsBtn.disabled = false;
+      } finally {
+        // Restore button state
+        submitBankDetailsBtn.disabled = false;
+        submitBankDetailsBtn.textContent = originalText;
       }
     });
   }
@@ -156,6 +163,11 @@
     uploadBtn.addEventListener('click', async () => {
       const file = docFileInput.files && docFileInput.files[0];
       if (!file) return alert('Select a file to upload');
+
+      // Prevent duplicate uploads
+      uploadBtn.disabled = true;
+      const originalUploadText = uploadBtn.textContent;
+      uploadBtn.textContent = 'Uploading...';
 
       const form = new FormData();
       form.append('document', file, file.name);
@@ -177,6 +189,9 @@
       } catch (err) {
         console.error('Upload error', err);
         alert('Upload failed');
+      } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.textContent = originalUploadText;
       }
     });
   }
